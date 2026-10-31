@@ -1,0 +1,9 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const es=new Map();function el(k){if(!es.has(k))es.set(k,{textContent:'',value:'',dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},addEventListener(n,f){this[n]=f},append(){},querySelectorAll(){return []},querySelector(){return el(k+'child')},focus(){},setCustomValidity(){},reportValidity(){}});return es.get(k)}
+global.window=global;global.document={title:'',body:el('body'),querySelector:el,querySelectorAll(){return []},createElement(){return el('option')},addEventListener(){}};global.matchMedia=()=>({matches:false,addEventListener(){}});global.localStorage={getItem(){return null},setItem(){}};
+vm.runInThisContext(fs.readFileSync('dist/config.js','utf8'));vm.runInThisContext(fs.readFileSync('dist/app.js','utf8'));
+BUSINESS.workshops.forEach((w,i)=>{explore(i);assert.equal(el('#workshop-title').textContent,w.name);assert.equal(el('#workshop-description').textContent,w.text)});
+el('#parent-name').value='María Pérez';el('#service').value='Refuerzo escolar';let url;window.open=u=>url=u;el('#contact-form').submit({preventDefault(){}});assert(decodeURIComponent(url).includes('Hola, soy María Pérez. Me interesa Refuerzo escolar.'));assert(url.startsWith('https://wa.me/51997158307?'));
+el('#motion').click();assert.equal(el('#motion').textContent,'Activar animaciones');
+const html=fs.readFileSync('dist/index.html','utf8');for(const match of html.matchAll(/(?:href|src)="([^"]+)"/g)){const ref=match[1];if(ref.startsWith('#'))assert(html.includes('id="'+ref.slice(1)+'"'),'anchor '+ref);if(/\.(js|css)$/.test(ref))assert(fs.existsSync('dist/'+ref),'asset '+ref)}
+console.log('PASS: initialization, four workshops, WhatsApp message and phone, animation pause, section anchors, local assets. Browser layout remains unverified.');
